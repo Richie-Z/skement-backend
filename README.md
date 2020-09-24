@@ -57,7 +57,15 @@ URL: /v1/card/{card_id}/down
 1. Move card to another list<br/>
 URL: /v1/card/{card_id}/move/{list_id}
 
+#### Installation guides
 
+
+1. Execute ```git clone https://github.com/Richie-Z/Backend-Trilu.git``` on your terminal to download this project.
+1. Go to the project root directory and execute ``composer install``
+1. Create a file named as .env and copy the content of .env.example to newly created .env file
+1. Then execute ```php artisan key:generate``` on your terminal/cmd to generate environment key
+1. Then create a Database for this project and edit the .env file to authorized this project on your database.
+1. Execute ```php artisan migrate``` on your terminal
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
