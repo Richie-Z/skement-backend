@@ -4,14 +4,14 @@ Trilu, task management website
 
 ## Future
 
-### 1. Authentication
+#### 1. Authentication
  1. Register <br/>
 URL: /v1/auth/register
  1. Login <br/>
 URL: /v1/auth/login
  1. Logout <br/>
 URL: /v1/auth/logout
-### 2. Board
+#### 2. Board
 1. Create new board <br/>
 URL: /v1/board
 1. Update board <br/>
@@ -27,8 +27,7 @@ URL: /v1/board/{board_id}/member
 1. Remove team member <br/>
 URL:
 /v1/board/{board_id}/member/{user_id}
-
-### 3. List
+#### 3. List
 1. Create new list <br/>
 URL: /v1/board/{board_id}/list
 1. Update list <br/>
@@ -41,8 +40,7 @@ URL:
 1. Move list to left <br/>
 URL:
 /v1/board/{board_id}/list/{list_id}/left
-
-### 4. Card
+#### 4. Card
 1. Create new card <br/>
 URL:/v1/board/{board_id}/list/{list_id}/card
 1. Update card <br/>
