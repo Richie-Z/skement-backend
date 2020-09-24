@@ -26,14 +26,37 @@ class ListController extends Controller
     }
     public function update(Request $request, $board_id, $list_id)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'invalid field', 'errors' => $validator->messages()], 422);
+        }
+        Board_list::where('id', $list_id)
+            ->where('board_id', $board_id)
+            ->update([
+                'board_id' => $board_id,
+                'order' => "0",
+                'name' => $request->name
+            ]);
+        return response()->json(['message' => 'update list success'], 200);
     }
     public function destroy($board_id, $list_id)
     {
+        $list = Board_list::where('id', $list_id)->where('board_id', $board_id);
+        $list->delete();
+        return response()->json(['message' => 'delete list success'], 200);
     }
-    public function right(Request $request, $board_id, $list_id)
+    public function right($board_id, $list_id)
     {
+        Board_list::where('id', $list_id)->where('board_id', $board_id)
+            ->update(['order' => '4']);
+        return response()->json(['message' => 'move right success'], 200);
     }
-    public function left(Request $request, $board_id, $list_id)
+    public function left($board_id, $list_id)
     {
+        Board_list::where('id', $list_id)->where('board_id', $board_id)
+            ->update(['order' => '2']);
+        return response()->json(['message' => 'move left success'], 200);
     }
 }
