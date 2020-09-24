@@ -19,7 +19,7 @@ class ListController extends Controller
         }
         $list = new Board_list;
         $list->board_id = $board_id;
-        $list->order = $request->order;
+        $list->order = "0";
         $list->name = $request->name;
         $list->save();
         return response()->json(['message' => 'create list success'], 200);

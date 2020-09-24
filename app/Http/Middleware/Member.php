@@ -21,7 +21,7 @@ class Member
         $userid = Auth::user();
         $member = Bmember::where('user_id', $userid->id)->count();
         if ($member == 0) {
-            return response()->json(['message' => 'not a member'], 401);
+            return response()->json(['message' => 'Unauthorized, you are not a member'], 401);
         }
         return $next($request);
     }
