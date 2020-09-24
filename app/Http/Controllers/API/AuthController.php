@@ -31,9 +31,7 @@ class AuthController extends Controller
         $user = User::create($input);
         $success['token'] =  $user->createToken('token')->accessToken;
 
-        return response()->json([
-            'status' => true, $success
-        ], 200);
+        return response()->json([$success], 200);
     }
     public function login(Request $request)
     {

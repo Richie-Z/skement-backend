@@ -33,7 +33,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('/', 'API\BoardController@index');
             Route::get('/{board_id}', 'API\BoardController@show');
             Route::post('/{board_id}/member', 'API\BoardController@storemember');
-            Route::delete('/{board_id}/member/{user_id}', 'API\BoardController@deletemember');
+            Route::delete('/{board_id}/member/{user_id}', 'API\BoardController@deletemember')->middleware('member');
             //list
             Route::post('/{board_id}/list', 'API\ListController@store');
             Route::put('/{board_id}/list/{list_id}', 'API\ListController@update');
