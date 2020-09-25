@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Board_member;
 
 class AuthController extends Controller
 {
@@ -71,6 +72,10 @@ class AuthController extends Controller
     public function details()
     {
         $user = Auth::user();
-        return $user;
+        $member = Board_member::where('user_id', $user->id)->pluck('board_id')->toArray();
+        if (!in_array('2', $member)) {
+            return "false";
+        }
+        return "true";
     }
 }

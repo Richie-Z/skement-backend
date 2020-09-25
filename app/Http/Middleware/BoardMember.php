@@ -24,8 +24,8 @@ class BoardMember
         if ($member->count() == 0) {
             return response()->json(['message' => 'Unauthorized, this user doesn`t have a member on any board'], 401);
         }
-        $validate = Board::where('id', $member->first()->board_id)->count();
-        if ($board_id != $member->first()->board_id) {
+        $array = $member->pluck('board_id')->toArray();
+        if (!in_array($board_id, $array)) {
             return response()->json(['message' => 'Unauthorized, you are not a board member'], 401);
         }
         return $next($request);
