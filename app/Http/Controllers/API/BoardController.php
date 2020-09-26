@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Board_member;
+use App\Http\Resources\Board as BoardResource;
 
 class BoardController extends Controller
 {
@@ -57,7 +58,8 @@ class BoardController extends Controller
     }
     public function show($board_id, Board $board)
     {
-        return $board->where('id', $board_id)->with(['user', 'list'])->get();
+        $query = $board->where('id', $board_id)->with(['user', 'list'])->get();
+        return BoardResource::collection($query);
     }
     public function storemember(Request $request, $board_id)
     {
