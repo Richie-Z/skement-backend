@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Board_member;
+use App\Board;
 
 class AuthController extends Controller
 {
@@ -77,5 +78,14 @@ class AuthController extends Controller
             return "false";
         }
         return "true";
+    }
+    public function test(User $user, Board $board)
+    {
+        // foreach ($board->all() as $boards) {
+        //     return $boards->user;
+        // }
+        // return $user->with('board')->get();
+        // return $board->all();
+        return $board->with(['user', 'list'])->get();
     }
 }
