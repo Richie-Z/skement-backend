@@ -55,8 +55,9 @@ class BoardController extends Controller
         $board = Board::all();
         return response()->json(['data' => $board], 200);
     }
-    public function show($board_id)
+    public function show($board_id, Board $board)
     {
+        return $board->where('id', $board_id)->with(['user', 'list'])->get();
     }
     public function storemember(Request $request, $board_id)
     {
