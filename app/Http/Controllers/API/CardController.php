@@ -19,12 +19,12 @@ class CardController extends Controller
         if ($validate->fails()) {
             return response()->json(['message' => 'invalid field', 'errors' => $validate->messages()], 422);
         }
-        $list = Board_List::where('board_id', $board_id);
-        $card = new Card;
-        $card->list_id = $list_id;
-        $card->order = "0";
-        $card->task = $request->task;
-        $card->save();
+        $list = Board_List::where('board_id', $board_id)->where('id', $list_id);
+        $list->card()->create([
+            'list_id' => $list_id,
+            'order' => "0",
+            'task' => $request->task
+        ]);
         return response()->json(['message' => 'create card success'], 200);
     }
     public function update(Request $request, $board_id, $list_id, $card_id)

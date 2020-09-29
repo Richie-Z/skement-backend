@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Board_member;
 use App\Board;
+use App\Board_list;
 
 class AuthController extends Controller
 {
@@ -74,18 +75,19 @@ class AuthController extends Controller
     {
         $user = Auth::user();
         $member = Board_member::where('user_id', $user->id)->pluck('board_id')->toArray();
-        if (!in_array('2', $member)) {
-            return "false";
+        if (!in_array('1', $member)) {
+            return "true";
         }
-        return "true";
+        return $user;
     }
-    public function test(User $user, Board $board)
+    public function test(User $user, Board $board, Board_list $list)
     {
         // foreach ($board->all() as $boards) {
         //     return $boards->user;
         // }
         // return $user->with('board')->get();
         // return $board->all();
-        return $board->with(['user', 'list'])->get();
+        // return $board->with(['user', 'list'])->get();
+        return $list->where('board_id', '1')->get();
     }
 }
