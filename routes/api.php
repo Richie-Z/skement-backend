@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/test', 'API\AuthController@test');
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('/register', 'API\AuthController@register');
@@ -48,7 +47,7 @@ Route::group(['prefix' => 'v1'], function () {
                 Route::delete('/{board_id}/list/{list_id}/card/{card_id}', 'API\CardController@destroy');
             });
         });
-        Route::group(['middleware' => ['boardmember']], function () {
+        Route::group(['middleware' => ['cardmember']], function () {
             Route::post('/card/{card_id}/up', 'API\CardController@up');
             Route::post('/card/{card_id}/down', 'API\CardController@down');
             Route::post('/card/{card_id}/move/{list_id}', 'API\CardController@move');

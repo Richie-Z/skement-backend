@@ -49,14 +49,22 @@ class ListController extends Controller
     }
     public function right($board_id, $list_id)
     {
-        Board_list::where('id', $list_id)->where('board_id', $board_id)
+        $right = Board_list::where('id', $list_id)->where('board_id', $board_id)
             ->update(['order' => '4']);
-        return response()->json(['message' => 'move right success'], 200);
+        if ($right) {
+            return response()->json(['message' => 'move right success'], 200);
+        } else {
+            return response()->json(['status' => false, 'message' => 'error,please check board id and list id'], 422);
+        }
     }
     public function left($board_id, $list_id)
     {
-        Board_list::where('id', $list_id)->where('board_id', $board_id)
+        $left = Board_list::where('id', $list_id)->where('board_id', $board_id)
             ->update(['order' => '2']);
-        return response()->json(['message' => 'move left success'], 200);
+        if ($left) {
+            return response()->json(['message' => 'move left success'], 200);
+        } else {
+            return response()->json(['status' => false, 'message' => 'error,please check board id and list id'], 422);
+        }
     }
 }
