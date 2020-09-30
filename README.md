@@ -54,7 +54,7 @@ URL: /v1/card/{card_id}/up
 URL: /v1/card/{card_id}/down
 1. Move card to another list<br/>
 URL: /v1/card/{card_id}/move/{list_id}
-### Midleware Info
+### Middleware Info
 1. Member </br>
 All member on board can access.(Get info by Auth)
 1. Board Member <br/>
