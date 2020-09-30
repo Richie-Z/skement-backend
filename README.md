@@ -47,7 +47,6 @@ URL:/v1/board/{board_id}/list/{list_id}/card
 URL: /v1/board/{board_id}/list/{list_id}/card/{card_id}
 1. Delete card <br/>
 URL: /v1/board/{board_id}/list/{list_id}/card/{card_id}
-OKEN}
 1. Move up card<br/>
 URL: /v1/card/{card_id}/up
 1. Move down card<br/>
