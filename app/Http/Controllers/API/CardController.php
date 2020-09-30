@@ -50,14 +50,31 @@ class CardController extends Controller
         $list->card()->find($card_id)->delete();
         return response()->json(['message' => 'delete card success'], 200);
     }
-    public function up(Request $request, $card_id)
+    public function up($card_id)
     {
-        return "aaa";
+        $card = Card::find($card_id);
+        $card->order = "1";
+        $card->save();
+        if ($card) {
+            return response()->json(['message' => 'move card up success'], 200);
+        }
     }
-    public function down(Request $request, $card_id)
+    public function down($card_id)
     {
+        $card = Card::find($card_id);
+        $card->order = "3";
+        $card->save();
+        if ($card) {
+            return response()->json(['message' => 'move card down success'], 200);
+        }
     }
-    public function move(Request $request, $card_id, $list_id)
+    public function move($card_id, $list_id)
     {
+        $card = Card::find($card_id);
+        $card->list_id = $list_id;
+        $card->save();
+        if ($card) {
+            return response()->json(['message' => 'move card to another list success'], 200);
+        }
     }
 }
