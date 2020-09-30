@@ -57,9 +57,9 @@ URL: /v1/card/{card_id}/move/{list_id}
 1. Member </br>
 All member on board can access.(Get info by Auth)
 1. Board Member <br/>
-Only member of spefic Board can access.(Get info by Board Id)
+Only member of specific Board can access.(Get info by Board Id)
 1. Board Member(card) <br/>
-Only member of spefic Board can access.(Get info by Card Id)
+Only member of specific Board can access.(Get info by Card Id)
 
 ## Installation guides
 
