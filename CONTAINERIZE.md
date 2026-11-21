@@ -30,4 +30,4 @@ boot + healthcheck only (DB not smoke-tested). db_driver: mysql. Never migrate/s
 - agent label 'php' unverified on k3s Jenkins - confirm with user
 
 Smoke results: 2026-11-20T23:17:20+07:00 boot=PASS http=200 db=skipped (artisan db:show not available on this framework version; no read-only DB check)
-Smoke results: 2026-11-21T21:37:54+07:00 boot=PASS http=200 db=skipped (legacy mysqli app; pgsql not supported without a code rewrite)
+Smoke results: 2026-11-22T00:59:04+07:00 boot=PASS http=200 db=skipped (artisan db:show not available on this framework version; no read-only DB check)
