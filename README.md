@@ -1,75 +1,87 @@
-# About Trilu
+# Trilu
 
-Trilu, task management website
+Trilu is a task-management backend built around boards, ordered lists, and task
+cards. A registered user creates a board, adds other users to it as members, and
+then organizes work by adding lists to the board and cards to each list,
+reordering them and moving cards between lists as priorities change. Its audience
+is an external client — a mobile app or single-page frontend — that consumes a
+JSON API and authenticates with a bearer token.
 
-## Future
+Trilu has no web interface of its own. The three screenshots in this README are
+the stock scaffolding shipped with the underlying PHP framework: its default
+welcome, login, and registration pages, captured from this repository. They are
+not the Trilu product UI. Everything the product actually does happens at
+`/api/v1/*`, which returns JSON only.
 
-#### 1. Authentication
- 1. Register <br/>
-URL: /v1/auth/register
- 1. Login <br/>
-URL: /v1/auth/login
- 1. Logout <br/>
-URL: /v1/auth/logout
-#### 2. Board
-1. Create new board <br/>
-URL: /v1/board
-1. Update board <br/>
-URL: /v1/board/{board_id}
-1. Delete board <br/>
-URL: /v1/board/{board_id}
-1. Get all boards <br/>
-URL: /v1/board
-1. Open board <br/>
-URL: /v1/board/{board_id}
-1. Add team member <br/>
-URL: /v1/board/{board_id}/member
-1. Remove team member <br/>
-URL:
-/v1/board/{board_id}/member/{user_id}
-#### 3. List
-1. Create new list <br/>
-URL: /v1/board/{board_id}/list
-1. Update list <br/>
-URL: /v1/board/{board_id}/list/{list_id}
-1. Delete list <br/>
-URL: /v1/board/{board_id}/list/{list_id}
-1. Move list to right <br/>
-URL:
-/v1/board/{board_id}/list/{list_id}/right
-1. Move list to left <br/>
-URL:
-/v1/board/{board_id}/list/{list_id}/left
-#### 4. Card
-1. Create new card <br/>
-URL:/v1/board/{board_id}/list/{list_id}/card
-1. Update card <br/>
-URL: /v1/board/{board_id}/list/{list_id}/card/{card_id}
-1. Delete card <br/>
-URL: /v1/board/{board_id}/list/{list_id}/card/{card_id}
-1. Move up card<br/>
-URL: /v1/card/{card_id}/up
-1. Move down card<br/>
-URL: /v1/card/{card_id}/down
-1. Move card to another list<br/>
-URL: /v1/card/{card_id}/move/{list_id}
-### Middleware Info
-1. Member </br>
-All member on board can access.(Get info by Auth)
-1. Board Member <br/>
-Only member of specific Board can access.(Get info by Board Id)
-1. Board Member(card) <br/>
-Only member of specific Board can access.(Get info by Card Id)
+![Default framework welcome page](docs/screenshots/01-home.png)
 
-## Installation guides
+The framework's out-of-the-box welcome page. Trilu itself has no screen like
+this — its surface is an API.
 
-1. Execute ```git clone https://github.com/Richie-Z/Backend-Trilu.git``` on your terminal to download this project.
-1. Go to the project root directory and execute ``composer install``
-1. Create a file named as .env and copy the content of .env.example to newly created .env file
-1. Then execute ```php artisan key:generate``` on your terminal/cmd to generate environment key
-1. Then create a Database for this project and edit the .env file to authorized this project on your database.
-1. Execute ```php artisan migrate``` on your terminal
+## What you can do
 
-## License
+- Register an account and receive a bearer token through `POST /api/v1/auth/register`, so a new user can start calling the API.
+- Log in with a username and password through `POST /api/v1/auth/login` to get a token, and revoke it with `GET /api/v1/auth/logout`.
+- Create a board you own, list the boards you can see, and rename or delete a board through `/api/v1/board`.
+- Add a member to a board by username, or remove an existing member, through the board's `/member` endpoints.
+- Add an ordered list to a board, then rename or delete it through the board's `/list` endpoints.
+- Add a task card to a list and edit or delete it through the nested `/card` endpoints.
+- Reorder lists left or right and cards up or down, and move a card from one list to another, so the board tracks changing work.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The login and registration screens below are Laravel's stock auth views from the
+framework scaffold. They are here only to document what the repository renders;
+the real Trilu auth flow is the token-returning API calls above, and these forms
+do not work against the repository's current database schema.
+
+![Default framework login form](docs/screenshots/02-login.png)
+
+Laravel's default login form — an email-and-password card. Trilu's API logs in by
+username, not email, and returns a bearer token rather than a session.
+
+![Default framework registration form](docs/screenshots/03-register.png)
+
+Laravel's default registration form, with name, email, and password fields. It is
+framework scaffolding, not a Trilu screen.
+
+## How it works
+
+Trilu is a Laravel JSON API: nginx serves `public/` and hands PHP requests to
+PHP-FPM over a Unix socket. Access is controlled by Passport bearer tokens plus
+three board-aware middleware — `member`, `boardmember`, and `cardmember` — that
+verify a user is allowed to reach the specific board, list, or card. Board, list,
+and card resources are nested under `/api/v1/board/{board_id}`, so authorization
+follows the ownership chain from a board down to its cards.
+
+## Running it
+
+```
+git clone https://github.com/Richie-Z/Backend-Trilu.git
+cd Backend-Trilu
+composer install
+cp .env.example .env
+php artisan key:generate
+```
+
+Create a database and set `DB_CONNECTION`, `DB_HOST`, `DB_DATABASE`,
+`DB_USERNAME`, and `DB_PASSWORD` in `.env` (the code defaults to MySQL; the
+workspace uses PostgreSQL). Then:
+
+```
+php artisan migrate
+php artisan serve
+```
+
+Note that `migrate` alone will not produce a working Trilu database — see
+Limitations.
+
+## Limitations
+
+- Running `php artisan migrate` creates only `users` and `products`. The tables the API actually uses — boards, board members, lists, and cards — are defined in `database/migrations/temp/`, which Laravel does not load, so those endpoints fail against a fresh database.
+- Because of that mismatch, registration and login are expected to fail against the migrated schema; the screenshots show forms that render but were not exercised end to end.
+- Passport's signing keys and personal-access client are not committed and `passport:install` has not been run, so token issuing would fail on first use until someone provisions them.
+- Committed bearer tokens in `Trilu.postman_collection.json` (lines 81, 116 and others) should be treated as exposed and revoked.
+- The runtime is PHP 7.2, which is end-of-life and receives no security fixes.
+- There is no global auth or API-key middleware, so a request to `/` returns 200 and unauthenticated API calls reach their routes before `auth:api` rejects them.
+
+Developer notes, exact versions, the full data model, and operational risks are
+in [TECHNICAL.md](TECHNICAL.md).
